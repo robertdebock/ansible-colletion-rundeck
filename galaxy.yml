@@ -1,0 +1,16 @@
+namespace: "robertdebock"
+name: "rundeck_collection"
+description: Install rundeck.
+version: "1.0.0"
+readme: "README.md"
+authors:
+    - "Robert de Bock"
+dependencies:
+license:
+    - "Apache-2.0"
+tags:
+    - rundeck
+repository: "https://github.com/robertdebock/ansible-collection-rundeck"
+documentation: "https://github.com/robertdebock/ansible-collection-rundeck/blob/master/README.md"
+homepage: "https://robertdebock.nl"
+issues: "https://github.com/robertdebock/ansible-collection-rundeck/issues"

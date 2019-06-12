@@ -1,0 +1,11 @@
+---
+- src: robertdebock.bootstrap
+  name: bootstrap
+- src: robertdebock.java
+  name: java
+- src: robertdebock.service
+  name: service
+- src: robertdebock.common
+  name: common
+- src: robertdebock.reboot
+  name: reboot

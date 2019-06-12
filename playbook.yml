@@ -1,0 +1,17 @@
+---
+- name: Install rundeck
+  hosts: all
+  gather_facts: no
+  become: yes
+
+  vars:
+    rundeck_users:
+      - username: "admin"
+        password: "Adm!n"
+        roles: "user,admin"
+
+  roles:
+    - bootstrap
+    - java
+    - common
+    - rundeck

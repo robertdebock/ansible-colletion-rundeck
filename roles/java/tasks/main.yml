@@ -1,0 +1,78 @@
+---
+# tasks file for java
+- name: install openjdk java (package)
+  package:
+    name: "{{ java_openjdk_package }}"
+    state: present
+  when:
+    java_vendor == "openjdk"
+  register: java_install_openjdk_java_package
+  until: java_install_openjdk_java_package is succeeded
+  retries: 3
+  environment:
+    USE: "X -cups -alsa -fontconfig"
+
+- name: copy oracle java (rpm)
+  copy:
+    src: "{{ java_package }}"
+    dest: "/tmp/{{ java_oracle_package }}"
+  when:
+    - java_rpm_source == "local"
+    - java_format == "rpm"
+
+- name: install oracle java (rpm) (local)
+  package:
+    name: "/tmp/{{ java_oracle_package }}"
+    state: present
+  when:
+    - java_rpm_source == "local"
+    - java_format == "rpm"
+  register: java_install_oracle_java_rpm_local
+  until: java_install_oracle_java_rpm_local
+  retries: 3
+
+- name: install oracle java (rpm) (repository)
+  package:
+    name: "{{ java_oracle_package }}"
+    state: present
+  when:
+    - java_rpm_source == "repository"
+    - java_format == "rpm"
+  register: java_install_oracle_java_rpm_repository
+  until: java_install_oracle_java_rpm_repository is succeeded
+  retries: 3
+
+- name: ensure java_install_directory exists
+  file:
+    path: "{{ java_install_directory }}"
+    state: directory
+  when:
+    - java_vendor == "oracle"
+    - java_format == "targz"
+
+- name: install oracle java (targz)
+  unarchive:
+    src: "{{ java_oracle_package }}"
+    dest: "{{ java_install_directory }}"
+  when:
+    - java_format == "targz"
+    - java_vendor == "oracle"
+
+- name: install oracle java policy software (targz)
+  unarchive:
+    src: jce_policy-8.zip
+    dest: "{{ java_install_directory }}"
+  when:
+    - java_jce
+    - java_version == 8
+    - java_vendor == "oracle"
+
+- name: set alternative (targz)
+  alternatives:
+    name: java
+    link: /usr/bin/java
+    path: "{{ java_install_directory }}/{{ java_oracle_directory }}/bin/java"
+  when:
+    - java_format == "targz"
+    - ansible_distribution != "Alpine"
+    - java_vendor == "oracle"
