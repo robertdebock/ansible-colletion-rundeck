@@ -44,6 +44,3 @@ galaxy_info:
     - server
     - system
     - ubuntu
-
-dependencies:
-  - reboot
