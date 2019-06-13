@@ -1,8 +1,8 @@
 ---
 galaxy_info:
   author: Robert de Bock
-  role_name: common
-  description: The purpose of this role is to configure common things on your system.
+  role_name: rundeck
+  description: Install and configure rundeck on your system.
   license: Apache-2.0
   company: none
   min_ansible_version: 2.6
@@ -33,17 +33,11 @@ galaxy_info:
         - bionic
 
   galaxy_tags:
-    - common
+    - rundeck
     - alpine
     - centos
     - debian
-    - el
     - fedora
-    - opensuse
-    - rhel
-    - server
-    - system
     - ubuntu
 
-dependencies:
-  - reboot
+dependencies: []

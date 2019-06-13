@@ -10,8 +10,11 @@
         password: "Adm!n"
         roles: "user,admin"
 
+  collections:
+    - robertdebock.rundeck_collection
+
   roles:
     - bootstrap
-    - java
     - common
+    - java
     - rundeck

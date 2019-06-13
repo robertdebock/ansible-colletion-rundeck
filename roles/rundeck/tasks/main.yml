@@ -1,0 +1,76 @@
+---
+# tasks file for rundeck
+- name: create rundeck directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ rundeck_rdeckbase }}"
+    - "{{ rundeck_rdeckbase }}/etc"
+    - "{{ rundeck_rdeckbase }}"
+
+- name: download rundeck
+  get_url:
+    url: "{{ rundeck_download_url }}"
+    dest: "{{ rundeck_rdeckbase }}/rundeck-{{ rundeck_version }}-{{ rundeck_release_date }}.war"
+  register: downloadrundeck
+  until: downloadrundeck is succeeded
+  retries: 3
+
+- name: unpack rundeck
+  command: "java -jar {{ rundeck_war }} --installonly"
+  args:
+    chdir: "{{ rundeck_rdeckbase }}"
+    creates: "{{ rundeck_rdeckbase }}/server"
+
+- name: create rundeck service
+  import_role:
+    name: service
+
+- name: configure rundeck properties
+  lineinfile:
+    dest: "{{ rundeck_rdeckbase }}/server/config/rundeck-config.properties"
+    line: "{{ item.parameter }} = {{ item.value }}"
+    regexp: "^{{ item.parameter }}"
+    create: yes
+  notify:
+    - restart rundeck
+  with_items:
+    - "{{ rundeck_config }}"
+  loop_control:
+    label: "{{ item.parameter }}"
+
+- name: configure rundeck framework
+  lineinfile:
+    dest: "{{ rundeck_rdeckbase }}/etc/framework.properties"
+    line: "{{ item.parameter }} = {{ item.value }}"
+    regexp: "^{{ item.parameter }}"
+    create: yes
+  notify:
+    - restart rundeck
+  with_items:
+    - "{{ rundeck_framework }}"
+  loop_control:
+    label: "{{ item.parameter }}"
+
+- name: configure rundeck policy
+  template:
+    src: admin.aclpolicy.j2
+    dest: "{{ rundeck_rdeckbase }}/etc/admin.aclpolicy"
+  notify:
+    - restart rundeck
+
+- name: configure rundeck default users
+  template:
+    src: realm.properties.j2
+    dest: "{{ rundeck_rdeckbase }}/server/config/realm.properties"
+  notify:
+    - restart rundeck
+
+- name: start rundeck
+  service:
+    name: rundeck
+    state: started
+    enabled: yes
+  when:
+    - ansible_virtualization_type != "docker"

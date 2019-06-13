@@ -1,0 +1,18 @@
+---
+# vars file for rundeck
+rundeck_version: 3.0.8
+rundeck_release_date: 20181029
+rundeck_download_url: "https://dl.bintray.com/rundeck/rundeck-maven/rundeck-{{ rundeck_version }}-{{ rundeck_release_date }}.war"
+rundeck_jar: rundeck-launcher-{{ rundeck_version }}.jar
+rundeck_war: "{{ rundeck_rdeckbase }}/rundeck-{{ rundeck_version }}-{{ rundeck_release_date }}.war"
+
+_rundeck_java_home:
+  default: /usr
+  Fedora: /usr/lib/jvm/jre
+
+rundeck_java_home: "{{ _rundeck_java_home[ansible_distribution] | default(_rundeck_java_home['default']) }}"
+
+service_list:
+  - name: rundeck
+    description: Rundeck
+    start_command: /usr/bin/java -Xmx{{ rundeck_xmx }}m -Xms{{ rundeck_xms }}m -XX:MaxMetaspaceSize={{ rundeck_maxmetaspacesize }}m -server -Dserver.web.context={{ rundeck_server_web_context }} -Dserver.http.host={{ rundeck_address }} -Dserver.http.port={{ rundeck_port }} -jar {{ rundeck_rdeckbase }}/rundeck-{{ rundeck_version }}-{{ rundeck_release_date }}.war
