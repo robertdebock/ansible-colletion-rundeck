@@ -1,8 +1,8 @@
 rundeck
 =========
 
-<img src="https://docs.ansible.com/ansible-tower/3.2.4/html_ja/installandreference/_static/images/logo_invert.png" width="10%" height="10%" alt="Ansible logo" align="left"/><img src="https://raw.githubusercontent.com/robertdebock/ansible-role-rundeck/master/meta/logo.png" alt="Project logo" width="40" height="40" align="right"/>
-[![Build Status](https://travis-ci.org/robertdebock/ansible-role-rundeck.svg?branch=master)](https://travis-ci.org/robertdebock/ansible-role-rundeck)
+<img src="https://docs.ansible.com/ansible-tower/3.2.4/html_ja/installandreference/_static/images/logo_invert.png" width="10%" height="10%" alt="Ansible logo" align="right"/><img src="https://raw.githubusercontent.com/robertdebock/ansible-role-rundeck/master/meta/logo.png" alt="Project logo" width="40" height="40" align="left"/>
+<a href="https://travis-ci.org/robertdebock/ansible-role-rundeck"><img src="https://travis-ci.org/robertdebock/ansible-role-rundeck.svg?branch=master" alt="Build status" align="left"/></a>
 
 Install and configure rundeck on your system.
 
@@ -103,13 +103,16 @@ rundeck_users:
   - username: "user"
     password: "user"
     roles: "user"
+
+rundeck_plugins:
+  - https://github.com/Batix/rundeck-ansible-plugin/releases/download/3.0.1/ansible-plugin-3.0.1.jar
 ```
 
 Requirements
 ------------
 
 - Access to a repository containing packages, likely on the internet.
-- A recent version of Ansible. (Tests run on the last 3 release of Ansible.)
+- A recent version of Ansible. (Tests run on the current, previous and next release of Ansible.)
 
 The following roles can be installed to ensure all requirements are met, using `ansible-galaxy install -r requirements.yml`:
 
@@ -136,22 +139,22 @@ Compatibility
 
 This role has been tested against the following distributions and Ansible version:
 
-|distribution|ansible 2.6|ansible 2.7|ansible devel|
+|distribution|ansible 2.7|ansible 2.8|ansible devel|
 |------------|-----------|-----------|-------------|
-|alpine-edge*|no|yes|yes*|
-|alpine-latest|no|yes|yes*|
-|archlinux|no|yes|yes*|
-|centos-6|no|yes|yes*|
-|centos-latest|no|yes|yes*|
-|debian-latest|no|yes|yes*|
-|debian-stable|no|yes|yes*|
-|debian-unstable*|no|yes|yes*|
-|fedora-latest|no|yes|yes*|
-|fedora-rawhide*|no|yes|yes*|
-|opensuse-leap|no|yes|yes*|
-|ubuntu-devel*|no|yes|yes*|
-|ubuntu-latest|no|yes|yes*|
-|ubuntu-rolling|no|yes|yes*|
+|alpine-edge*|yes|yes|yes*|
+|alpine-latest|yes|yes|yes*|
+|archlinux|yes|yes|yes*|
+|centos-6|yes|yes|yes*|
+|centos-latest|yes|yes|yes*|
+|debian-latest|yes|yes|yes*|
+|debian-stable|yes|yes|yes*|
+|debian-unstable*|yes|yes|yes*|
+|fedora-latest|yes|yes|yes*|
+|fedora-rawhide*|yes|yes|yes*|
+|opensuse-leap|yes|yes|yes*|
+|ubuntu-devel*|yes|yes|yes*|
+|ubuntu-latest|yes|yes|yes*|
+|ubuntu-rolling|yes|yes|yes*|
 
 A single star means the build may fail, it's marked as an experimental build.
 
@@ -168,19 +171,9 @@ pip install molecule
 molecule test
 ```
 
-To test on Amazon EC2, configure [~/.aws/credentials](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html) and `export AWS_REGION=eu-central-1` before running `molecule test --scenario-name ec2`.
+To test on Amazon EC2, configure [~/.aws/credentials](https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html) and set a region using `export AWS_REGION=eu-central-1` before running `molecule test --scenario-name ec2`.
 
 There are many specific scenarios available, please have a look in the `molecule/` directory.
-
-Run the [ansible-galaxy](https://github.com/ansible/galaxy-lint-rules) and [my](https://github.com/robertdebock/ansible-lint-rules) lint rules if you want your change to be merges:
-
-```shell
-git clone https://github.com/ansible/ansible-lint.git /tmp/ansible-lint
-ansible-lint -r /tmp/ansible-lint/lib/ansiblelint/rules .
-
-git clone https://github.com/robertdebock/ansible-lint /tmp/my-ansible-lint
-ansible-lint -r /tmp/my-ansible-lint/rules .
-```
 
 License
 -------
@@ -191,4 +184,4 @@ Apache-2.0
 Author Information
 ------------------
 
-Robert de Bock
+[Robert de Bock](https://robertdebock.nl/)

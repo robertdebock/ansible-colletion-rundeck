@@ -44,3 +44,6 @@ galaxy_info:
     - server
     - system
     - ubuntu
+
+dependencies:
+  - robertdebock.reboot
