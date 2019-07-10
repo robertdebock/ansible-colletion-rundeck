@@ -1,7 +1,7 @@
 namespace: "robertdebock"
 name: "rundeck_collection"
 description: Install rundeck.
-version: "1.0.3"
+version: "1.0.4"
 readme: "README.md"
 authors:
     - "Robert de Bock"

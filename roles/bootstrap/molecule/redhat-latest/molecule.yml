@@ -8,15 +8,19 @@ lint:
 driver:
   name: docker
 platforms:
-  - name: java-opensuse-leap
-    image: opensuse/leap
+  - name: bootstrap-rhel-latest
+    image: ubi8/ubi
     pre_build_image: yes
+    registry:
+      url: registry.access.redhat.com
+      credentials:
+        username: $registryredhatiousername
+        password: $registryredhatiopassword
 provisioner:
   name: ansible
   playbooks:
-    prepare: ../resources/prepare.yml
     converge: ../resources/playbook.yml
   lint:
     name: ansible-lint
 scenario:
-  name: opensuse-leap
+  name: redhat-latest
