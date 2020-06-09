@@ -1,7 +1,7 @@
 Rundeck collection
 ==================
 
-An [Ansible Collection](https://galaxy.ansible.com/docs/mazer/examples.html#installing-collections) to quickly get [Rundeck](https://www.rundeck.com/) up and running.
+An [Ansible Collection](https://docs.ansible.com/ansible/devel/user_guide/collections_using.html#collections) to quickly get [Rundeck](https://www.rundeck.com/) up and running.
 
 Requirements
 ------------
@@ -12,7 +12,7 @@ Installation
 ------------
 
 ```
-mazer install robertdebock.rundeck_collections
+ansible-galaxy collection install robertdebock.rundeck_collections
 ```
 
 Usage
