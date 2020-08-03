@@ -1,18 +1,8 @@
 ---
 # handlers file for service
+- name: gather facts
+  setup:
+
 - name: systemctl daemon-reload
   systemd:
     daemon_reload: yes
-  when:
-    - ansible_virtualization_type != "docker"
-
-- name: restart service
-  service:
-    name: "{{ item.name }}"
-    state: restarted
-  with_items:
-    - "{{ service_list }}"
-  when:
-    - ansible_virtualization_type != "docker"
-  loop_control:
-    label: "{{ item.name }}"

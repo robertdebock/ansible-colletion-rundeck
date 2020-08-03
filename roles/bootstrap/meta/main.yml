@@ -1,11 +1,10 @@
----
 galaxy_info:
   author: Robert de Bock
   role_name: bootstrap
   description: Prepare your system to be managed by Ansible.
   license: Apache-2.0
   company: none
-  min_ansible_version: 2.6
+  min_ansible_version: 2.8
 
   platforms:
     - name: Alpine
@@ -13,55 +12,34 @@ galaxy_info:
         - all
     - name: Amazon
       versions:
-        - all
-    - name: ArchLinux
-      version:
-        - all
+        - 2018.03
+    - name: EL
+      versions:
+        - 7
+        - 8
     - name: Debian
       versions:
-        - all
-    - name: EL
-      version:
-        - 6
-        - 7
+        - buster
+        - bullseye
     - name: Fedora
       versions:
-        - all
-    - name: FreeBSD
-      versions:
-        - 10.4
-        - 11.2
-    - name: OpenBSD
-      versions:
-        - all
+        - 31
+        - 32
     - name: OpenSUSE
       versions:
         - all
-    - name: SLES
-      verions:
-        - all
     - name: Ubuntu
       versions:
-        - artful
+        - focal
         - bionic
+        - xenial
 
   galaxy_tags:
-    - alpine
     - bootstrap
     - centos
-    - debian
-    - el
-    - fedora
-    - freebsd
-    - gentoo
     - installer
-    - kali
-    - openbsd
-    - opensuse
-    - rhel
     - server
-    - sudo
     - system
-    - ubuntu
+    - oraclelinux
 
 dependencies: []

@@ -7,7 +7,5 @@
   name: service
 - src: robertdebock.common
   name: common
-- src: robertdebock.reboot
-  name: reboot
 - src: robertdebock.rundeck
   name: rundeck

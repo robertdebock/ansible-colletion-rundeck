@@ -3,3 +3,13 @@
 - name: gather facts
   setup:
   become: no
+
+- name: reload network manager
+  service:
+    name: NetworkManager
+    state: reloaded
+
+- name: reboot
+  reboot:
+  when:
+    - common_reboot | bool

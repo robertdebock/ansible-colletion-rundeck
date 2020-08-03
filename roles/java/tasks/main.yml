@@ -1,12 +1,12 @@
 ---
 # tasks file for java
+- name: include assert.yml
+  include_tasks: assert.yml
+
 - name: install requirements
   package:
     name: bash
     state: present
-  register: java_install_requirements
-  until: java_install_requirements is succeeded
-  retries: 3
 
 - name: install openjdk java (package)
   package:
@@ -14,9 +14,6 @@
     state: present
   when:
     java_vendor == "openjdk"
-  register: java_install_openjdk_java_package
-  until: java_install_openjdk_java_package is succeeded
-  retries: 3
   environment:
     USE: "X -cups -alsa -fontconfig"
 
@@ -35,9 +32,6 @@
   when:
     - java_rpm_source == "local"
     - java_format == "rpm"
-  register: java_install_oracle_java_rpm_local
-  until: java_install_oracle_java_rpm_local is succeeded
-  retries: 3
 
 - name: install oracle java (rpm) (repository)
   package:
@@ -46,9 +40,6 @@
   when:
     - java_rpm_source == "repository"
     - java_format == "rpm"
-  register: java_install_oracle_java_rpm_repository
-  until: java_install_oracle_java_rpm_repository is succeeded
-  retries: 3
 
 - name: ensure java_install_directory exists
   file:
@@ -72,6 +63,7 @@
     dest: "{{ java_install_directory }}"
   when:
     - java_jce | bool
+    - java_version is defined
     - java_version == 8
     - java_vendor == "oracle"
 
@@ -90,11 +82,12 @@
   args:
     executable: /bin/bash
   changed_when: no
+  check_mode: no
   register: java_home
 
 - name: set JAVA_HOME in /etc/environment
   lineinfile:
     path: /etc/profile.d/java_home.sh
-    regexp: '^JAVA_HOME='
-    line: 'JAVA_HOME="{{ java_home.stdout }}"'
+    regexp: '^export JAVA_HOME='
+    line: 'export JAVA_HOME="{{ java_home.stdout }}"'
     create: yes

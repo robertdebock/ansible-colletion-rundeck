@@ -1,6 +1,10 @@
 ---
 # defaults file for rundeck
 
+# Rundeck version to install
+rundeck_version: 3.2.6
+rundeck_release_date: 20200427
+
 # Where to install rundeck.
 rundeck_rdeckbase: /opt/rundeck
 
@@ -11,12 +15,15 @@ rundeck_maxmetaspacesize: 128
 
 # The URL where Rundeck will be served on:
 rundeck_port: 4440
-rundeck_address: "{{ ansible_default_ipv4.address }}"
+rundeck_address: "{{ ansible_all_ipv4_addresses[0] | default('127.0.0.1') }}"
 rundeck_server_web_context: /
 
+# The `rundeck_url` is a combination of the above values.
 rundeck_url: "http://{{ rundeck_address }}:{{ rundeck_port }}{{ rundeck_server_web_context }}"
 
 rundeck_config:
+  - parameter: server.address
+    value: "{{ rundeck_address }}"
   - parameter: grails.serverURL
     value: "{{ rundeck_url }}"
 
@@ -49,7 +56,7 @@ rundeck_framework:
   # - parameter: "framework.log.dispatch.console.format"
   #   value: unset
   - parameter: framework.rundeck.execution.script.tokenexpansion.enabled
-    value: true
+    value: yes
 
 # default users stored in {{ rundeck_rdeckbase }}/server/config/realm.properties
 rundeck_users:
@@ -60,5 +67,6 @@ rundeck_users:
     password: "user"
     roles: "user"
 
-rundeck_plugins:
-  - https://github.com/Batix/rundeck-ansible-plugin/releases/download/3.0.1/ansible-plugin-3.0.1.jar
+# Rundeck plugins to install
+rundeck_plugins: []
+  # - https://github.com/Batix/rundeck-ansible-plugin/releases/download/3.1.1/ansible-plugin-3.1.1.jar

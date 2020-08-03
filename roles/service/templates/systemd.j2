@@ -1,6 +1,9 @@
 {{ ansible_managed | comment }}
 [Unit]
 Description={{ item.description }}
+{% if item.after is defined %}
+After={{ item.after }}
+{% endif %}
 
 [Service]
 {% if item.type is defined and item.type != "simple" %}
@@ -18,6 +21,17 @@ Group={{ item.group_name }}
 ExecStart={{ item.start_command }}
 {% if item.stop_command is defined %}
 ExecStop={{ item.stop_command }}
+{% endif %}
+{% if item.environment_variables is defined %}
+{% for key in item.environment_variables %}
+Environment={{ key }}={{ item.environment_variables[key] }}
+{% endfor %}
+{% endif %}
+{% if item.restart_mode is defined %}
+Restart={{ item.restart_mode }}
+{% endif %}
+{% if item.restart_seconds is defined %}
+RestartSec={{ item.restart_seconds }}
 {% endif %}
 
 [Install]

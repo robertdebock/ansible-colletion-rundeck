@@ -1,15 +1,14 @@
 ---
 # tasks file for service
+- name: include assert.yml
+  include_tasks: assert.yml
+
 - name: install required packages
   package:
     name: "{{ service_required_packages }}"
     state: present
-  register: service_install_required_packages
-  until: service_install_required_packages is succeeded
-  retries: 3
-
-- name: gather_facts
-  setup:
+  notify:
+    - gather facts
 
 - name: configure systemd service
   template:
@@ -19,8 +18,7 @@
     - ansible_service_mgr == "systemd"
   notify:
     - systemctl daemon-reload
-  with_items:
-    - "{{ service_list }}"
+  loop: "{{ service_list }}"
   loop_control:
     label: "{{ item.name }}"
 
@@ -28,15 +26,12 @@
   template:
     src: "sysvinit.j2"
     dest: "/etc/init.d/{{ item.name }}"
-    mode: "0755"
+    mode: "755"
   when:
     - ansible_service_mgr == "sysvinit" or
       ansible_service_mgr == "upstart" or
       ansible_service_mgr == "openrc"
-  with_items:
-    - "{{ service_list }}"
-  notify:
-    - restart service
+  loop: "{{ service_list }}"
   loop_control:
     label: "{{ item.name }}"
 

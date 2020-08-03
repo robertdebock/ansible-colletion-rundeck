@@ -1,44 +1,42 @@
----
 galaxy_info:
   author: Robert de Bock
   role_name: java
   description: Install and configure java on your system.
   license: Apache-2.0
   company: none
-  min_ansible_version: 2.6
-  min_ansible_container_version: 0.2.0
+  min_ansible_version: 2.8
 
   platforms:
     - name: Alpine
       versions:
         - all
-    - name: ArchLinux
-      version:
-        - all
-    - name: Debian
+    - name: Amazon
       versions:
-        - all
-    - name: Fedora
-      versions:
-        - all
+        - 2018.03
     - name: EL
       versions:
-        - 6
         - 7
+        - 8
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+    - name: Fedora
+      versions:
+        - 31
+        - 32
     - name: OpenSUSE
       versions:
         - all
     - name: Ubuntu
       versions:
-        - artful
+        - focal
         - bionic
+        - xenial
 
   galaxy_tags:
-    - alpine
     - centos
-    - debian
-    - fedora
-    - rhel
+    - redhat
     - java
     - oracle
     - openjdk

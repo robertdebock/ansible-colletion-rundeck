@@ -1,10 +1,13 @@
 ---
 # tasks file for rundeck
+- name: include assert.yml
+  include_tasks: assert.yml
+
 - name: create rundeck directories
   file:
     path: "{{ item }}"
     state: directory
-  with_items:
+  loop:
     - "{{ rundeck_rdeckbase }}"
     - "{{ rundeck_rdeckbase }}/etc"
     - "{{ rundeck_rdeckbase }}"
@@ -13,9 +16,6 @@
   get_url:
     url: "{{ rundeck_download_url }}"
     dest: "{{ rundeck_rdeckbase }}/rundeck-{{ rundeck_version }}-{{ rundeck_release_date }}.war"
-  register: downloadrundeck
-  until: downloadrundeck is succeeded
-  retries: 3
 
 - name: unpack rundeck
   command: "java -jar {{ rundeck_war }} --installonly"
@@ -35,8 +35,7 @@
     create: yes
   notify:
     - restart rundeck
-  with_items:
-    - "{{ rundeck_config }}"
+  loop: "{{ rundeck_config }}"
   loop_control:
     label: "{{ item.parameter }}"
 
@@ -48,8 +47,7 @@
     create: yes
   notify:
     - restart rundeck
-  with_items:
-    - "{{ rundeck_framework }}"
+  loop: "{{ rundeck_framework }}"
   loop_control:
     label: "{{ item.parameter }}"
 
@@ -67,15 +65,16 @@
   notify:
     - restart rundeck
 
+- name: create /opt/rundeck/libext
+  file:
+    path: /opt/rundeck/libext
+    state: directory
+
 - name: install plugins
   get_url:
     url: "{{ item }}"
     dest: /opt/rundeck/libext
-  register: rundeck_install_plugins
-  until: rundeck_install_plugins is succeeded
-  retries: 3
-  with_items:
-    - "{{ rundeck_plugins }}"
+  loop: "{{ rundeck_plugins }}"
   when: rundeck_plugins is defined
 
 - name: start rundeck
@@ -83,5 +82,3 @@
     name: rundeck
     state: started
     enabled: yes
-  when:
-    - ansible_virtualization_type != "docker"
